@@ -1,7 +1,6 @@
 package pl.linkshortener.commands.shorten;
 
 import pl.linkshortener.commands.Command;
-import pl.linkshortener.model.ShortenedLink;
 
 public class Shorten implements Command<ShortenedLink> {
     private String url;
