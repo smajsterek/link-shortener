@@ -1,5 +1,7 @@
 package pl.linkshortener.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class ExpandLink {
 
+    private final Logger logger = LoggerFactory.getLogger(ExpandLink.class);
+
     @Autowired
     Links links;
 
@@ -31,13 +35,27 @@ public class ExpandLink {
         if (link != null) {
             Future future = new Future(new Loggable(new Executor(new GeolocateReaction())));
             CompletableFuture<LocatedIP> locatedIpFuture = future.schedule(new Geolocate(request.getRemoteAddr()));
-            locatedIpFuture.thenAcceptAsync(this::persistLocatedId);
-            response.sendRedirect(link.getUrl());
+            //locatedIpFuture.thenAcceptAsync(this::persistLocatedId);
+            locatedIpFuture.whenCompleteAsync(this::persistLocatedId);
+            String url = link.getUrl().toLowerCase();
+            if (!url.startsWith("http://") && !url.startsWith("http://")) {
+                url = "http://" + link.getUrl();
+            }
+            response.sendRedirect(url);
+            return;
         }
-        response.sendRedirect("/missingUrl");
+        response.sendRedirect("/missingUrl?url=" + shortUrl);
     }
 
-    private void persistLocatedId(LocatedIP locatedIP) {
-        //TODO: implement
+    private void handleLocalizationException(Runnable runnable) {
+    }
+
+    private void persistLocatedId(LocatedIP locatedIP, Throwable throwable) {
+        if (throwable != null) {
+            // handle success
+            logger.info(">>>>GEOLOCATION: {}", locatedIP);
+        } else {
+            logger.error("Unable to retrieve geolocation.", throwable);
+        }
     }
 }

@@ -129,4 +129,24 @@ public class LocatedIP implements Command.Response {
     public void setAs(String as) {
         this.as = as;
     }
+
+    @Override
+    public String toString() {
+        return "LocatedIP{" +
+            "query='" + query + '\'' +
+            ", status='" + status + '\'' +
+            ", country='" + country + '\'' +
+            ", countryCode='" + countryCode + '\'' +
+            ", region='" + region + '\'' +
+            ", regionName='" + regionName + '\'' +
+            ", city='" + city + '\'' +
+            ", zip='" + zip + '\'' +
+            ", lat=" + lat +
+            ", lon=" + lon +
+            ", timezone='" + timezone + '\'' +
+            ", isp='" + isp + '\'' +
+            ", org='" + org + '\'' +
+            ", as='" + as + '\'' +
+            '}';
+    }
 }
