@@ -1,6 +1,5 @@
 package pl.linkshortener.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.linkshortener.commands.shorten.Shorten;
@@ -14,8 +13,11 @@ import pl.linkshortener.decorators.Now;
 @RestController
 public class ShortenLink {
 
-    @Autowired
-    Links links;
+    private Links links;
+
+    public ShortenLink(Links links) {
+        this.links = links;
+    }
 
     @RequestMapping("/shorten")
     public ShortenedLink shortenLink(String url, String shortUrl) {

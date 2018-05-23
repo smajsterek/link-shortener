@@ -19,8 +19,4 @@ public class Shorten implements Command<ShortenedLink> {
     public String getShortUrl() {
         return shortUrl;
     }
-
-    public void assignShortUrl(String shortUrl) {
-        this.shortUrl = shortUrl;
-    }
 }
